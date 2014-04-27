@@ -49,14 +49,6 @@ var app = (function () {
         comp.release.value = options.release;
         return comp;
     }
-    function createAnalyser (args) {
-        var options = $.extend({ size: 1024, max: 0, min: -100 }, args),
-            analyser = app.context.createAnalyser();
-        analyser.fftSize = options.size;
-        analyser.maxDecibels = options.max;
-        analyser.minDecidels = options.min;
-        return analyser;
-    }
     app.context = (function(){
         var context;
         if (typeof AudioContext != 'undefined'){
@@ -68,10 +60,17 @@ var app = (function () {
     })();
     app.run = function () {
         this.container = $('#container');
+        this.infoWindow = $('#info');
+        this.footer = $('#footer');
+        this.errorBar = $('#error-bar')
         this.videoOne = $('#birds-one');
         this.videoTwo = $('#birds-two');
         this.resize();
-        this.play();
+        if (this.context) {
+            this.play();
+        } else {
+            this.bork();
+        }
         return this;
     };
     app.resize = function () {
@@ -82,32 +81,34 @@ var app = (function () {
         return this;
     };
     window.addEventListener('resize', plonk.limit(100, app.resize, app));
-    app.nodes = {
-        oscA: createOscillator({ type: 'saw', frequency: 100 }),
-        oscB: createOscillator({ type: 'sine', frequency: 600 }),
-        xmodGainA: createGainNode({ gain: 1 }),
-        xmodGainB: createGainNode({ gain: 1 }),
-        oscGainA: createGainNode(),
-        oscGainB: createGainNode(),
-        delay: createDelayNode({ time: 0.1 }),
-        filter: createFilter({ type: 'lowpass', frequency: 330, q: 0.45 }),
-        compressor: createCompressor({ ratio: 8, threshold: -1, attack: 0.1, release: 0.25 }),
-        master: createGainNode()
-    };
-    app.nodes.oscB.connect(app.nodes.xmodGainA);
-    app.nodes.xmodGainA.connect(app.nodes.oscA.frequency);
-    app.nodes.oscA.connect(app.nodes.xmodGainB); 
-    app.nodes.xmodGainB.connect(app.nodes.oscB.frequency);
-    app.nodes.oscA.connect(app.nodes.oscGainA);
-    app.nodes.oscB.connect(app.nodes.oscGainB);
-    app.nodes.oscGainA.connect(app.nodes.filter);
-    app.nodes.oscGainB.connect(app.nodes.filter);
-    app.nodes.oscGainA.connect(app.nodes.delay);
-    app.nodes.oscGainB.connect(app.nodes.delay);
-    app.nodes.delay.connect(app.nodes.filter);
-    app.nodes.filter.connect(app.nodes.compressor);
-    app.nodes.compressor.connect(app.nodes.master);
-    app.nodes.master.connect(app.context.destination);
+    if (app.context) {
+        app.nodes = {
+            oscA: createOscillator({ type: 'saw', frequency: 100 }),
+            oscB: createOscillator({ type: 'sine', frequency: 600 }),
+            xmodGainA: createGainNode({ gain: 1 }),
+            xmodGainB: createGainNode({ gain: 1 }),
+            oscGainA: createGainNode(),
+            oscGainB: createGainNode(),
+            delay: createDelayNode({ time: 0.1 }),
+            filter: createFilter({ type: 'lowpass', frequency: 330, q: 0.45 }),
+            compressor: createCompressor({ ratio: 8, threshold: -1, attack: 0.1, release: 0.25 }),
+            master: createGainNode()
+        };
+        app.nodes.oscB.connect(app.nodes.xmodGainA);
+        app.nodes.xmodGainA.connect(app.nodes.oscA.frequency);
+        app.nodes.oscA.connect(app.nodes.xmodGainB); 
+        app.nodes.xmodGainB.connect(app.nodes.oscB.frequency);
+        app.nodes.oscA.connect(app.nodes.oscGainA);
+        app.nodes.oscB.connect(app.nodes.oscGainB);
+        app.nodes.oscGainA.connect(app.nodes.filter);
+        app.nodes.oscGainB.connect(app.nodes.filter);
+        app.nodes.oscGainA.connect(app.nodes.delay);
+        app.nodes.oscGainB.connect(app.nodes.delay);
+        app.nodes.delay.connect(app.nodes.filter);
+        app.nodes.filter.connect(app.nodes.compressor);
+        app.nodes.compressor.connect(app.nodes.master);
+        app.nodes.master.connect(app.context.destination);
+    }
     app.play = function () {
         var videoOne = this.videoOne[0],
             videoTwo = this.videoTwo[0],
@@ -120,6 +121,8 @@ var app = (function () {
             oscAFreq = plonk.drunk(95, 105),
             oscBFreq = plonk.drunk(28, 38),
             filter = plonk.drunk(100, 6000);
+        videoOne.play();
+        videoTwo.play();
         plonk.dust(250, 1000, function () {
             videoOne.playbackRate = speedOne();
         }, this);
@@ -152,11 +155,21 @@ var app = (function () {
         plonk.walk(100, 300, function () {
             app.nodes.filter.frequency.value = filter();
         });
-        plonk.wait(500, function () {
-            plonk.env(0, 1, 2000, function (n, i) {
+        plonk.wait(250, function () {
+            plonk.env(0, 1, 3000, function (n, i) {
                 app.nodes.master.gain.value = n;
             });
         });
+        plonk.wait(20000, function () {
+            app.infoWindow.fadeOut(1000);
+            app.footer.fadeIn(1000);
+        });
+        return this;
+    };
+    app.bork = function () {
+        this.infoWindow.hide();
+        this.errorBar.fadeIn(500);
+        return this;
     };
     return app;
 })();
