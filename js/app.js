@@ -120,6 +120,7 @@ var app = (function () {
             oscBGain = plonk.drunk(0.75, 1, 0.05),
             oscAFreq = plonk.drunk(95, 105),
             oscBFreq = plonk.drunk(28, 38),
+            delay = plonk.drunk(0.01, 1, 0.075),
             filter = plonk.drunk(100, 6000);
         videoOne.play();
         videoTwo.play();
@@ -147,7 +148,6 @@ var app = (function () {
         plonk.walk(50, 300, function () {
             app.nodes.oscB.frequency.value = oscBFreq();
         });
-        var delay = plonk.drunk(0.01, 1, 0.075);
         plonk.walk(1000, 10000, function(time){
             var n = delay();
             app.nodes.delay.delayTime.setTargetValueAtTime(n, 0, 10);
