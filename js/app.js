@@ -3,40 +3,30 @@ var app = (function () {
     var app = {};
     function createOscillator (args) {
         var options = $.extend({ type: 'sine', frequency: 440 }, args),
-            osc = app.context.createOscillator(),
-            types = { sine: osc.SINE, square: osc.SQUARE, saw: osc.SAWTOOTH };
-        osc.type = types[options.type]
+            osc = app.context.createOscillator();
+        osc.type = options.type;
         osc.frequency.value = options.frequency;
         osc.noteOn && osc.noteOn(0);
         return osc;
     }
-    function createGainNode (args) {
+    function createGain (args) {
         var options = $.extend({ gain: 0 }, args),
-            gainNode = app.context.createGainNode();
+            gainNode = app.context.createGain();
         gainNode.gain.value = options.gain;
         return gainNode;
     }
     function createFilter (args) {
         var options = $.extend({ type: 'lowpass', frequency: 1000, q: 0.0001, gain: 0 }, args),
-            filter = app.context.createBiquadFilter(),
-            types = {
-                hipass: filter.HIGHPASS,
-                lowpass: filter.LOWPASS,
-                bandpass: filter.BANDPASS,
-                allpass: filter.ALLPASS,
-                highshelf: filter.HIGHSHELF,
-                lowshelf: filter.LOWSHELF,
-                peak: filter.PEAKING
-            };
-        filter.type = types[options.type];
+            filter = app.context.createBiquadFilter();
+        filter.type = options.type;
         filter.frequency.value = options.frequency;
         filter.Q.value = options.q;
         filter.gain.value = options.gain;
         return filter;        
     }
-    function createDelayNode (args) {
+    function createDelay (args) {
         var options = $.extend({ time: 0 }, args),
-            delay = app.context.createDelayNode();
+            delay = app.context.createDelay();
         delay.delayTime.value = options.time;
         return delay;
     }
@@ -51,11 +41,13 @@ var app = (function () {
     }
     app.context = (function(){
         var context;
-        if (typeof AudioContext != 'undefined'){
-            context = new AudioContext();
-        } else if (typeof webkitAudioContext != 'undefined'){
+        if (typeof webkitAudioContext != 'undefined'){
             context = new webkitAudioContext();
+        } else if (typeof AudioContext != 'undefined'){
+            context = new AudioContext();
         }
+        context.createGainNode || (context.createGainNode = context.createGain);
+        context.createDelayNode || (context.createDelayNode = context.createDelay);
         return context;
     })();
     app.run = function () {
@@ -83,16 +75,16 @@ var app = (function () {
     window.addEventListener('resize', plonk.limit(100, app.resize, app));
     if (app.context) {
         app.nodes = {
-            oscA: createOscillator({ type: 'saw', frequency: 100 }),
+            oscA: createOscillator({ type: 'sawtooth', frequency: 100 }),
             oscB: createOscillator({ type: 'sine', frequency: 600 }),
-            xmodGainA: createGainNode({ gain: 1 }),
-            xmodGainB: createGainNode({ gain: 1 }),
-            oscGainA: createGainNode(),
-            oscGainB: createGainNode(),
-            delay: createDelayNode({ time: 0.1 }),
+            xmodGainA: createGain({ gain: 1 }),
+            xmodGainB: createGain({ gain: 1 }),
+            oscGainA: createGain(),
+            oscGainB: createGain(),
+            delay: createDelay({ time: 0.1 }),
             filter: createFilter({ type: 'lowpass', frequency: 330, q: 0.45 }),
             compressor: createCompressor({ ratio: 8, threshold: -1, attack: 0.1, release: 0.25 }),
-            master: createGainNode()
+            master: createGain()
         };
         app.nodes.oscB.connect(app.nodes.xmodGainA);
         app.nodes.xmodGainA.connect(app.nodes.oscA.frequency);
@@ -150,7 +142,7 @@ var app = (function () {
         });
         plonk.walk(1000, 10000, function(time){
             var n = delay();
-            app.nodes.delay.delayTime.setTargetValueAtTime(n, 0, 10);
+            app.nodes.delay.delayTime.setTargetAtTime(n, 0, 10);
         });
         plonk.walk(100, 300, function () {
             app.nodes.filter.frequency.value = filter();
