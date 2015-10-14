@@ -15,5 +15,20 @@
   "bugs": {
     "url": "https://github.com/prtcl/birds/issues"
   },
-  "homepage": "https://github.com/prtcl/birds#readme"
+  "homepage": "https://github.com/prtcl/birds#readme",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-browser-sync": "^2.1.3",
+    "grunt-browserify": "^4.0.1",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-copy": "^0.8.1",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-sass": "^1.0.0",
+    "load-grunt-tasks": "^3.3.0"
+  },
+  "dependencies": {
+    "lodash": "^3.10.1",
+    "plonk": "0.0.4",
+    "spinkit": "^1.2.2"
+  }
 }

@@ -1,0 +1,22 @@
+#!/bin/sh
+
+
+echo ""
+echo "Installing node modules..."
+
+rm -r node_modules/
+npm install
+
+echo ""
+echo "Linking app dir to node_modules"
+
+cd node_modules && ln -nsf ../src/app && cd ..
+
+echo ""
+echo "Building JS and SCSS"
+
+grunt build
+
+echo ""
+echo "*** Initialization Complete ***"
+echo ""
