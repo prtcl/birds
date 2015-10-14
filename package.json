@@ -1,0 +1,19 @@
+{
+  "name": "birds",
+  "version": "1.0.0",
+  "description": "",
+  "main": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prtcl/birds.git"
+  },
+  "author": "Cory O'Brien",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/prtcl/birds/issues"
+  },
+  "homepage": "https://github.com/prtcl/birds#readme"
+}
