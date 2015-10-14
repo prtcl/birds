@@ -29,10 +29,13 @@
     <footer id="footer">
         <p><a href="http://github.com/prtcl/birds">Birds</a> by <a href="http://prtcl.cc">Cory O'Brien</a> &copy; 2014</p>
     </footer>
-    <video id="birds-one" class="birds" loop>
-        <source src="/mov/birds.webmsd.webm" type='video/webm; codecs="vp8, vorbis"'>
-        <source src="/mov/birds.mp4.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"' />
-    </video>
+    <div id="video-player" class="container absolute-top-left video-player">
+        <canvas></canvas>
+        <video class="hidden">
+            <source src="/mov/birds.webmsd.webm" type='video/webm; codecs="vp8, vorbis"'>
+            <source src="/mov/birds.mp4.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"' />
+        </video>
+    </div>
 </div>
 </body>
 </html>
