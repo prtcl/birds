@@ -17,6 +17,7 @@ html, body {
     text-rendering: optimizeLegibility;
     z-index: 0;
     position: relative;
+    color: white;
 }
 
 ::-moz-selection { background-color: transparent; }
@@ -24,6 +25,7 @@ html, body {
 
 h1, h2, h3, h4, h5 {
     margin: 0 0 0.75em 0;
+    font-size: $root-font-size;
     line-height: 1em;
 }
 
@@ -40,12 +42,11 @@ h5 {
 }
 
 p {
-    margin: 0 0 1em 0;
 }
 
 a, a:active, a:visited {
     text-decoration: underline;
-    color: #00f;
+    color: white;
 }
 
 a:hover {

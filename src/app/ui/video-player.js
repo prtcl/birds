@@ -68,8 +68,7 @@ VideoPlayer.prototype.stop = function () {
 
 VideoPlayer.prototype.seek = function (n) {
     n = plonk.constrain(n || 0, 0, 1);
-    this.position = this.video.currentTime = n * this.duration;
-    this.video.play();
+    this.position = this.video.currentTime = Math.round(n * this.duration);
     return this;
 };
 

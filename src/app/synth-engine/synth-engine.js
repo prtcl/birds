@@ -42,7 +42,8 @@ SynthEngine.prototype.run = function () {
         this.nodes.oscGainA = createGain({ gain: 0 }, this.audioContext);
         this.nodes.oscGainB = createGain({ gain: 0 }, this.audioContext);
         this.nodes.delay = createDelay({ time: 0.1 }, this.audioContext);
-        this.nodes.filter = createFilter({ type: 'lowpass', frequency: 330, q: 0.45 }, this.audioContext);
+        this.nodes.delayGain = createGain({ gain: 0.5 }, this.audioContext);
+        this.nodes.filter = createFilter({ type: 'bandpass', frequency: 330, q: 0.25 }, this.audioContext);
         this.nodes.compressor = createCompressor({ ratio: 8, threshold: -1, attack: 0.1, release: 0.25 }, this.audioContext);
         this.nodes.output = createGain({ gain: 0 }, this.audioContext);
         this.nodes.oscB.connect(this.nodes.xmodGainA);
@@ -53,10 +54,11 @@ SynthEngine.prototype.run = function () {
         this.nodes.oscB.connect(this.nodes.oscGainB);
         this.nodes.oscGainA.connect(this.nodes.filter);
         this.nodes.oscGainB.connect(this.nodes.filter);
-        this.nodes.oscGainA.connect(this.nodes.delay);
-        this.nodes.oscGainB.connect(this.nodes.delay);
-        this.nodes.delay.connect(this.nodes.filter);
+        this.nodes.filter.connect(this.nodes.delay);
         this.nodes.filter.connect(this.nodes.compressor);
+        this.nodes.delay.connect(this.nodes.delayGain);
+        this.nodes.delayGain.connect(this.nodes.filter);
+        this.nodes.delayGain.connect(this.nodes.compressor);
         this.nodes.compressor.connect(this.nodes.output);
         this.nodes.output.connect(this.audioContext.destination);
         this._ready = true;
@@ -82,6 +84,19 @@ SynthEngine.prototype.stop = function () {
     if (!this.isReady()) return this;
     var currentTime = this.audioContext.currentTime;
     this.nodes.output.gain.setTargetAtTime(0, currentTime, 0.1);
+    return this;
+};
+
+SynthEngine.prototype.setParameters = function (attrs) {
+    var currentTime = this.audioContext.currentTime;
+    this.nodes.xmodGainA.gain.setValueAtTime(attrs.xmodA, currentTime);
+    this.nodes.xmodGainB.gain.setValueAtTime(attrs.xmodB, currentTime);
+    this.nodes.oscGainA.gain.setValueAtTime(attrs.oscA_gain, currentTime);
+    this.nodes.oscGainB.gain.setValueAtTime(attrs.oscB_gain, currentTime);
+    this.nodes.oscA.frequency.setValueAtTime(attrs.oscA_freq, currentTime);
+    this.nodes.oscB.frequency.setValueAtTime(attrs.oscB_freq, currentTime);
+    this.nodes.delay.delayTime.setTargetAtTime(attrs.delay_time, currentTime, 0.1)
+    this.nodes.filter.frequency.setTargetAtTime(attrs.filter_freq, currentTime, 0.1);
     return this;
 };
 

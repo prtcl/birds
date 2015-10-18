@@ -2,7 +2,7 @@
 var plonk = require('plonk');
 
 var SynthEngine = require('app/synth-engine/synth-engine'),
-    VideoReader = require('app/lib/video-reader'),
+    ValueDuster = require('app/controllers/value-duster'),
     VideoPlayer = require('app/ui/video-player');
 
 var app = {};
@@ -13,11 +13,21 @@ app.run = function () {
         .on('ready', function () { console.log('[ready] synth engine'); })
         .run();
     this.videoPlayer = new VideoPlayer({ el: document.body.querySelector('#video-player') });
+    this.valueDuster = new ValueDuster()
+        .on('audio-params', function (attrs) {
+            app.synthEngine.setParameters(attrs);
+        })
+        .on('video-params', function (attrs) {
+            app.videoPlayer.seek(attrs.video_position);
+            app.videoPlayer.speed(attrs.video_speed);
+            app.videoPlayer.opacity(attrs.video_opacity);
+        });
     return this;
 };
 
 app.play = function () {
     this.synthEngine.play();
+    this.valueDuster.run();
     this.videoPlayer.play();
     return this;
 };
