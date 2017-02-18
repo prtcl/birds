@@ -4,151 +4,141 @@
 *,
 *::after,
 *::before {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
-html, body {
-    width: 100%;
-    height: 100%;
-    font-size: $root-font-size;
-    line-height: $root-line-height;
-    font-weight: normal;
-    font-family: $root-font-family;
-    text-rendering: optimizeLegibility;
-    z-index: 0;
-    position: relative;
-    color: white;
+html,
+body {
+  background-color: #f9f9f9;
+  color: #fff;
+  font-family: $root-font-family;
+  font-size: $root-font-size;
+  font-weight: normal;
+  height: 100%;
+  line-height: $root-line-height;
+  overflow: hidden;
+  position: relative;
+  text-rendering: optimizeLegibility;
+  width: 100%;
+  z-index: 0;
 }
 
-::-moz-selection { background-color: transparent; }
-::selection { background-color: transparent; }
+::selection {
+  background-color: transparent;
+}
 
-h1, h2, h3, h4, h5 {
-    margin: 0 0 0.75em 0;
-    font-size: $root-font-size;
-    line-height: 1em;
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-size: $root-font-size;
+  line-height: 1em;
+  margin: 0 0 0.75em;
 }
 
 h3 {
-    font-size: $root-font-size;
-    font-weight: normal;
+  font-size: $root-font-size;
+  font-weight: normal;
 }
 
 h5 {
-    font-size: $root-font-size;
-    line-height: 1em;
-    font-weight: normal;
-    text-transform: uppercase;
+  font-size: $root-font-size;
+  font-weight: normal;
+  line-height: 1em;
+  text-transform: uppercase;
 }
 
-p {
-}
-
-a, a:active, a:visited {
-    text-decoration: underline;
-    color: white;
+a,
+a:active,
+a:visited {
+  color: #fff;
+  text-decoration: underline;
 }
 
 a:hover {
-    text-decoration: none;
+  text-decoration: none;
+}
+
+ul,
+ol {
+  margin: 1em 0;
 }
 
 li {
-    list-style: none;
+  list-style: none;
+  margin: 0 0 0.25em;
+}
+
+ol > li {
+  list-style: upper-roman inside;
 }
 
 article,
 section {
-    z-index: 0;
+  z-index: 0;
 }
 
 img {
-    width: auto;
-    display: inline-block;
-    vertical-align: middle;
+  display: inline-block;
+  vertical-align: middle;
+  width: auto;
 }
 
 fieldset {
-    border: none;
+  border: none;
 }
 
 label {
-    margin: 0 0.25em 0 0;
-    width: auto;
-    display: inline-block;
+  display: inline-block;
+  margin: 0 0.25em 0;
+  width: auto;
 }
 
 input,
 textarea,
 button {
-    margin: 0;
-    padding: 0;
-    font-size: $root-font-size;
-    line-height: 1em;
-    font-weight: normal;
-    font-family: $root-font-family;
-    outline: none;
+  font-family: $root-font-family;
+  font-size: $root-font-size;
+  font-weight: normal;
+  line-height: 1em;
+  margin: 0;
+  outline: none;
+  padding: 0;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 input {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 input[type=text],
 input[type=email] {
-    padding: 0.25em;
-    border: 1px solid gray;
+  border: 1px solid #888;
+  padding: 0.25em;
 }
 
-::-webkit-input-placeholder {
-    font-size: $root-font-size;
-    line-height: 1em;
-    font-weight: italic;
-    font-family: $root-font-family;
-    color: #ccc;
-}
-
-:-moz-placeholder {
-    font-size: $root-font-size;
-    line-height: 1em;
-    font-weight: italic;
-    font-family: $root-font-family;
-    color: #ccc;
-}
-
-::-moz-placeholder {
-    font-size: $root-font-size;
-    line-height: 1em;
-    font-weight: italic;
-    font-family: $root-font-family;
-    color: #ccc;
-}
-
-:-ms-input-placeholder {
-    font-size: $root-font-size;
-    line-height: 1em;
-    font-weight: italic;
-    font-family: $root-font-family;
-    color: #ccc;
+::placeholder {
+  color: #ccc;
+  font-family: $root-font-family;
+  font-size: $root-font-size;
+  font-weight: italic;
+  line-height: 1em;
 }
 
 table {
-    width: 100%;
-    border-collapse: collapse;
+  border-collapse: collapse;
+  width: 100%;
 }
 
-tr {
-    
-}
-
-th, td {
-    padding: 0.5em;
-    border: 1px solid gray;
-    text-align: left;
-}
-
-button {
-    border: none;
-    background: none;
-    cursor: pointer;
+th,
+td {
+  border: 1px solid #888;
+  padding: 0.5em;
+  text-align: left;
 }
