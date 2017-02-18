@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title>Birds - Cory O'Brien</title>
+
+  <meta name="description" content="A/V web installation for Chrome. Video and real-time audio synthesis." />
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+
+  <meta property="og:title" content="Birds (2014) - Cory O'Brien" />
+  <meta property="og:description" content="A/V web installation for Chrome. Video and real-time audio synthesis." />
+  <meta property="og:url" content="http://birds.prtcl.cc" />
+  <meta property="og:image" content="http://birds.prtcl.cc/img/screenshot-01.jpg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  {{#if prod}}
+  <link rel="stylesheet" type="text/css" href="/assets/main.min.css" />
+  <script src="/assets/app.min.js"></script>
+  {{else}}
+  <link rel="stylesheet" type="text/css" href="/assets/main.css" />
+  <script src="/assets/app.js"></script>
+  {{/if}}
+
+</head>
+<body>
+  <div id="container" class="container">
+    <div id="info-window" class="info-window">
+      <h1>Birds (2014)</h1>
+      <h2><a href="http://prtcl.cc">Cory O'Brien</a></h2>
+      <p>Video, Web Audio API</p>
+      <p>Code at <a href="http://github.com/prtcl/birds">GitHub</a></p>
+    </div>
+    <footer id="footer">
+      <p><a href="http://github.com/prtcl/birds">Birds</a> by <a href="http://prtcl.cc">Cory O'Brien</a> &copy; 2014</p>
+    </footer>
+    <div id="video-player" class="container absolute-top-left video-player">
+      <canvas></canvas>
+      <video class="hidden">
+        <source src="/assets/birds.webmsd.webm" type='video/webm; codecs="vp8, vorbis"'>
+        <source src="/assets/birds.mp4.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"' />
+      </video>
+    </div>
+  </div>
+</body>
+</html>
