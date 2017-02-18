@@ -1,12 +1,11 @@
 
-var _ = { assign: require('lodash/object/assign') };
+import assign from 'lodash/assign';
 
-module.exports = function (args, audioContext) {
-    args || (args = {});
-    var options = _.assign({ type: 'sine', frequency: 440 }, args),
+export default function (args = {}, audioContext) {
+  const options = assign({ type: 'sine', frequency: 440 }, args),
         osc = audioContext.createOscillator();
-    osc.type = options.type;
-    osc.frequency.value = options.frequency;
-    osc.start(0);
-    return osc;
-};
+  osc.type = options.type;
+  osc.frequency.value = options.frequency;
+  osc.start(0);
+  return osc;
+}

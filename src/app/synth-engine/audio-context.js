@@ -1,10 +1,10 @@
 
-module.exports = function () {
-    var audioContext;
-    if (typeof AudioContext !== 'undefined') {
-        audioContext = new AudioContext();
-    } else if (typeof webkitAudioContext !== 'undefined') {
-        audioContext = new webkitAudioContext();
-    }
-    return audioContext;
-};
+export default function audioContext () {
+  var context;
+  if (typeof AudioContext !== 'undefined') {
+    context = new AudioContext();
+  } else if (typeof webkitAudioContext !== 'undefined') {
+    context = new webkitAudioContext();
+  }
+  return context;
+}

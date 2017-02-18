@@ -1,10 +1,9 @@
 
-var _ = { assign: require('lodash/object/assign') };
+import assign from 'lodash/assign';
 
-module.exports = function (args, audioContext) {
-    args || (args = {});
-    var options = _.assign({ gain: 0 }, args),
+export default function createGain (args = {}, audioContext) {
+  const options = assign({ gain: 0 }, args),
         gainNode = audioContext.createGain();
-    gainNode.gain.value = options.gain;
-    return gainNode;
-};
+  gainNode.gain.value = options.gain;
+  return gainNode;
+}

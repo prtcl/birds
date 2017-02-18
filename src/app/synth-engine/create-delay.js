@@ -1,10 +1,9 @@
 
-var _ = { assign: require('lodash/object/assign') };
+import assign from 'lodash/assign';
 
-module.exports = function (args, audioContext) {
-    args || (args = {});
-    var options = _.assign({ time: 0 }, args),
+export default function createDelay (args = {}, audioContext) {
+  const options = assign({ time: 0 }, args),
         delay = audioContext.createDelay();
-    delay.delayTime.value = options.time;
-    return delay;
-};
+  delay.delayTime.value = options.time;
+  return delay;
+}

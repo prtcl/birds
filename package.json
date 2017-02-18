@@ -28,6 +28,7 @@
     "hbs:dev": "$(npm bin)/handlebars --prod false < ./src/templates/index.hbs > ./www/index.html",
     "hbs:prod": "$(npm bin)/handlebars --prod true < ./src/templates/index.hbs > ./www/index.html",
     "init": "rm -r ./node_modules ; npm install && cd node_modules && ln -nsf ../src/app && cd .. && npm run build",
+    "lint": "$(npm bin)/eslint ./src/app || true",
     "sass": "$(npm bin)/node-sass ./src/scss/main.scss > ./www/assets/main.css && $(npm bin)/postcss --use autoprefixer -c .postcss.json -m -r ./www/assets/main.css",
     "start": "cd ./www && $(npm bin)/static",
     "uglify": "$(npm bin)/uglifyjs ./www/assets/app.js --compress warnings=false,sequences=true,properties=true,dead_code=true,booleans=true,drop_console=true --mangle --screw-ie8 > ./www/assets/app.min.js",
@@ -44,6 +45,7 @@
     "babelify": "^7.3.0",
     "browserify": "^14.1.0",
     "cssnano-cli": "^1.0.5",
+    "eslint": "^3.15.0",
     "handlebars-cmd": "^0.1.4",
     "node-sass": "^4.5.0",
     "node-static": "^0.7.9",
@@ -55,7 +57,6 @@
     "watchify": "^3.9.0"
   },
   "dependencies": {
-    "lodash": "^3.10.1",
     "plonk": "0.0.4"
   }
 }
