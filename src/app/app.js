@@ -1,5 +1,5 @@
 
-import plonk from 'plonk';
+import debounce from 'lodash/debounce';
 
 import SynthEngine from 'app/synth-engine/synth-engine';
 import ValueDuster from 'app/controllers/value-duster';
@@ -43,6 +43,6 @@ window.addEventListener('load', () => {
   window.app = app.run();
 });
 
-window.addEventListener('resize', plonk.limit(150, () => {
+window.addEventListener('resize', debounce(() => {
   app.videoPlayer.resize();
-}));
+}, 150));

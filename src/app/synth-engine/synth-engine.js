@@ -2,19 +2,21 @@
 import EventEmitter from 'events';
 import isUndefined from 'lodash/isUndefined';
 
-import audioContext from 'app/synth-engine/audio-context';
-import createGain from 'app/synth-engine/create-gain';
-import createCompressor from 'app/synth-engine/create-compressor';
-import createFilter from 'app/synth-engine/create-filter';
-import createOscillator from 'app/synth-engine/create-oscillator';
-import createDelay from 'app/synth-engine/create-delay';
+import {
+  createAudioContext,
+  createCompressor,
+  createDelay,
+  createFilter,
+  createGain,
+  createOscillator
+} from './helpers';
 
 
 export default class SynthEngine extends EventEmitter {
 
   constructor () {
     super();
-    this.audioContext = audioContext();
+    this.audioContext = createAudioContext();
     this.nodes = {};
     this._ready = false;
     this._compatibleBrowser = this.isCompatibleBrowser();
@@ -35,17 +37,19 @@ export default class SynthEngine extends EventEmitter {
     }
 
     try {
-      this.nodes.oscA = createOscillator({ type: 'sawtooth', frequency: 100 }, this.audioContext);
-      this.nodes.oscB = createOscillator({ type: 'sine', frequency: 600 }, this.audioContext);
-      this.nodes.xmodGainA = createGain({ gain: 1 }, this.audioContext);
-      this.nodes.xmodGainB = createGain({ gain: 1 }, this.audioContext);
-      this.nodes.oscGainA = createGain({ gain: 0 }, this.audioContext);
-      this.nodes.oscGainB = createGain({ gain: 0 }, this.audioContext);
-      this.nodes.delay = createDelay({ time: 0.1 }, this.audioContext);
-      this.nodes.delayGain = createGain({ gain: 0.5 }, this.audioContext);
-      this.nodes.filter = createFilter({ type: 'bandpass', frequency: 330, q: 0.25 }, this.audioContext);
-      this.nodes.compressor = createCompressor({ ratio: 8, threshold: -1, attack: 0.1, release: 0.25 }, this.audioContext);
-      this.nodes.output = createGain({ gain: 0 }, this.audioContext);
+
+      this.nodes.oscA = createOscillator(this.audioContext, { type: 'sawtooth', frequency: 100 });
+      this.nodes.oscB = createOscillator(this.audioContext, { type: 'sine', frequency: 600 });
+      this.nodes.xmodGainA = createGain(this.audioContext, { gain: 1 });
+      this.nodes.xmodGainB = createGain(this.audioContext, { gain: 1 });
+      this.nodes.oscGainA = createGain(this.audioContext, { gain: 0 });
+      this.nodes.oscGainB = createGain(this.audioContext, { gain: 0 });
+      this.nodes.delay = createDelay(this.audioContext, { time: 0.1 });
+      this.nodes.delayGain = createGain(this.audioContext, { gain: 0.5 });
+      this.nodes.filter = createFilter(this.audioContext, { type: 'bandpass', frequency: 330, q: 0.25 });
+      this.nodes.compressor = createCompressor(this.audioContext, { ratio: 8, threshold: -1, attack: 0.1, release: 0.25 });
+      this.nodes.output = createGain(this.audioContext, { gain: 0 });
+
       this.nodes.oscB.connect(this.nodes.xmodGainA);
       this.nodes.xmodGainA.connect(this.nodes.oscA.frequency);
       this.nodes.oscA.connect(this.nodes.xmodGainB);
@@ -61,7 +65,9 @@ export default class SynthEngine extends EventEmitter {
       this.nodes.delayGain.connect(this.nodes.compressor);
       this.nodes.compressor.connect(this.nodes.output);
       this.nodes.output.connect(this.audioContext.destination);
+
       this._ready = true;
+
     } catch (err) {
       this.emit('error', err);
     }
@@ -102,6 +108,7 @@ export default class SynthEngine extends EventEmitter {
     this.nodes.oscB.frequency.setValueAtTime(attrs.oscB_freq, currentTime);
     this.nodes.delay.delayTime.setTargetAtTime(attrs.delay_time, currentTime, 0.1);
     this.nodes.filter.frequency.setTargetAtTime(attrs.filter_freq, currentTime, 0.1);
+
     return this;
   }
 }
