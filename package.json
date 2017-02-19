@@ -27,7 +27,6 @@
     "dev": "$(npm bin)/parallelshell 'npm run watch' 'npm run start'",
     "hbs:dev": "$(npm bin)/handlebars --prod false < ./src/templates/index.hbs > ./www/index.html",
     "hbs:prod": "$(npm bin)/handlebars --prod true < ./src/templates/index.hbs > ./www/index.html",
-    "init": "rm -r ./node_modules ; npm install && cd node_modules && ln -nsf ../src/app && cd .. && npm run build",
     "lint": "$(npm bin)/eslint ./src/app || true",
     "sass": "$(npm bin)/node-sass ./src/scss/main.scss > ./www/assets/main.css && $(npm bin)/postcss --use autoprefixer -c .postcss.json -m -r ./www/assets/main.css",
     "start": "cd ./www && $(npm bin)/static",
