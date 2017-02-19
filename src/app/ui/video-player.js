@@ -2,7 +2,6 @@
 import { clamp, frames } from 'plonk';
 import EventEmitter from 'events';
 
-
 export default class VideoPlayer extends EventEmitter {
 
   constructor (args = {}) {
@@ -66,7 +65,9 @@ export default class VideoPlayer extends EventEmitter {
     this.isPlaying = true;
     this.video.play();
 
-    frames((...args) => this._frameHandler(...args));
+    frames((...args) => {
+      this._frameHandler(...args);
+    });
 
     return this;
   }
