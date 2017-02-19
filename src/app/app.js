@@ -22,12 +22,12 @@ const app = {
 
     this.valueDuster = new ValueDuster()
       .on('audio-params', (attrs) => {
-        app.synthEngine.setParameters(attrs);
+        this.synthEngine.setParameters(attrs);
       })
       .on('video-params', (attrs) => {
-        app.videoPlayer.seek(attrs.video_position);
-        app.videoPlayer.speed(attrs.video_speed);
-        app.videoPlayer.opacity(attrs.video_opacity);
+        this.videoPlayer.seek(attrs.video_position);
+        this.videoPlayer.speed(attrs.video_speed);
+        this.videoPlayer.opacity(attrs.video_opacity);
       });
 
     this.synthEngine.play();

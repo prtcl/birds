@@ -1,6 +1,6 @@
 
+import { clamp, frames } from 'plonk';
 import EventEmitter from 'events';
-import plonk from 'plonk';
 
 
 export default class VideoPlayer extends EventEmitter {
@@ -32,15 +32,17 @@ export default class VideoPlayer extends EventEmitter {
 
   _canplayHandler () {
     this._progressHandler();
-    this.emit('load');
+    this.emit('loaded');
   }
 
   _progressHandler () {
     this.duration = this.video.buffered.end(0);
   }
 
-  _frameHandler () {
-    if (!this.playing) return false;
+  _frameHandler (interval, i, elapsed, stop) {
+    if (!this.isPlaying) {
+      return stop();
+    }
 
     this.time = this.video.currentTime;
     this.position = (this.time / this.duration);
@@ -48,9 +50,8 @@ export default class VideoPlayer extends EventEmitter {
     this.height = this.el.clientHeight;
 
     this.context.drawImage(this.video, 0, 0, this.width, this.height);
-    this.emit('frame', this.video, this.position);
 
-    return this.playing;
+    this.emit('frame', this.video, this.position);
   }
 
   resize () {
@@ -60,34 +61,44 @@ export default class VideoPlayer extends EventEmitter {
   }
 
   play () {
-    this.playing = true;
+    if (this.isPlaying) return this;
+
+    this.isPlaying = true;
     this.video.play();
-    plonk.frames(this._frameHandler, this);
+
+    frames((...args) => this._frameHandler(...args));
+
     return this;
   }
 
   stop () {
-    this.playing = false;
+    if (!this.isPlaying) return this;
+
+    this.isPlaying = false;
     this.video.pause();
     this.position = this.time = this.video.currentTime = 0;
+
     return this;
   }
 
   seek (n) {
-    n = plonk.constrain(n || 0, 0, 1);
+    n = clamp(n || 0, 0, 1);
     this.position = this.video.currentTime = Math.round(n * this.duration);
+
     return this;
   }
 
   speed (n) {
-    n = plonk.constrain(n || 0, 0, 10);
+    n = clamp(n || 0, 0, 10);
     this.video.playbackRate = n;
+
     return this;
   }
 
   opacity (n) {
-    n = plonk.constrain(n || 0, 0, 1);
+    n = clamp(n || 0, 0, 1);
     this.context.globalAlpha = n;
+
     return this;
   }
 }
